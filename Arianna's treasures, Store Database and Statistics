@@ -1,0 +1,29 @@
+CREATE TABLE Ariannastreasures(ID INTEGER PRIMARY KEY, Item TEXT, ItemCategory TEXT, Cost INTEGER, Quantity INTEGER);
+
+INSERT INTO Ariannastreasures VALUES
+(1, 'Buster Sword', 'Collectible', 140, 1),
+(2, 'Spider-Man funko pops', 'Collectible', 40, 3), 
+(3, 'Superman Red and blue', 'Comic Book', 20, 2),
+(4, 'Francisco Lindor photo', 'Photo', 60, 1), 
+(5, 'Marvel posters', 'Poster', 5, 10),
+(6, 'Mets Jersey', 'Clothing', 40, 5),
+(7, 'Boxing gloves', 'Sports Gear', 60, 1),
+(8, 'Bow and Arrow', 'Athletics', 125, 2),
+(9, 'Weight lifting gloves', 'Sports Gear', 20, 3),
+(10, 'Aerith Music box', 'Collectible', 60, 1),
+(11, 'Resident Evil 4', 'Video Game', 65, 1),
+(12, 'Swimming Cap', 'Athletics', 23, 4),
+(13, 'Teddy Bear', 'Collectible', 15, 8),
+(14, 'Motorcycle Jacket', 'Clothing', 80, 2),
+(15, 'Tactical Pants', 'Clothing', 30, 6);
+
+SELECT * FROM Ariannastreasures;
+
+--Display the database ordered by cost
+SELECT * FROM Ariannastreasures ORDER BY cost;
+
+--Display the most expensive item in the store
+SELECT Item, MAX(cost) FROM Ariannastreasures;
+
+--What is the item that is the highest in stock at the moment?
+SELECT Item, MAX(Quantity) FROM Ariannastreasures
