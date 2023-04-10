@@ -1,0 +1,69 @@
+
+CREATE TABLE MVC3_Characters(ID INTEGER PRIMARY KEY, name TEXT, Strength INTEGER, Speed INTEGER, Fighting_Ability INTEGER, Occupation TEXT, Weapons TEXT);
+
+INSERT INTO MVC3_Characters VALUES (1, 'Akuma', 4, 3, 7, 'Fighter', 'No');
+INSERT INTO MVC3_Characters VALUES (2, 'Amaterasu Okami', 1, 3, 5, 'Sun God', 'Yes');
+INSERT INTO MVC3_Characters VALUES (3, 'Arthur', 2, 2, 4, 'Knight', 'Yes');
+INSERT INTO MVC3_Characters VALUES (4, 'Chris Redfield', 3, 2, 4, 'BSAA Agent', 'Yes');
+INSERT INTO MVC3_Characters VALUES (5, 'Chun-Li', 2, 3, 5, 'Interpol Officer', 'No');
+INSERT INTO MVC3_Characters VALUES (6, 'Crimson Viper', 2, 3, 4, 'CIA Agent', 'Yes');
+INSERT INTO MVC3_Characters VALUES (7, 'Dante', 4, 3, 6, 'Devil Hunter', 'Yes');
+INSERT INTO MVC3_Characters VALUES (8, 'Felicia', 2, 2, 4, 'Musical Star', 'Yes');
+INSERT INTO MVC3_Characters VALUES (9, 'Firebrand', 3, 3, 4, 'Demon World Knight', 'No');
+INSERT INTO MVC3_Characters VALUES (10, 'Frank West', 2, 2, 2, 'Freelance Photographer', 'Yes');
+INSERT INTO MVC3_Characters VALUES (11, 'Haggar', 4, 2, 5, 'Mayor', 'No');
+INSERT INTO MVC3_Characters VALUES (12, 'Hsien-Ko', 3, 2, 4, 'Priest', 'Yes');
+INSERT INTO MVC3_Characters VALUES (13, 'Jill Valentine', 2, 3, 4, 'BSAA Operative', 'Yes');
+INSERT INTO MVC3_Characters VALUES (14, 'Morrigan Aensland', 2, 3, 4, 'Head of Aensland House', 'Yes');
+INSERT INTO MVC3_Characters VALUES (15, 'Nemesis T-Type', 5, 1, 5, 'Bioweapon', 'Yes');
+INSERT INTO MVC3_Characters VALUES (16, 'Phoenix Wright', 1, 1, 1, 'Lawyer', 'No');
+INSERT INTO MVC3_Characters VALUES (17, 'Ryu', 3, 2, 5, 'Fighter', 'No');
+INSERT INTO MVC3_Characters VALUES (18, 'Spencer',4, 2, 4, 'Former U.S. Gov Operative', 'Yes');
+INSERT INTO MVC3_Characters VALUES (19, 'Strider Hyru', 2, 4, 7, 'A-Class Strider', 'Yes');
+INSERT INTO MVC3_Characters VALUES (20, 'Vergil', 4, 3, 6, 'Dark Knight', 'Yes');
+INSERT INTO MVC3_Characters VALUES (21, 'Captain America', 3, 2, 6, 'Soldier', 'Yes');
+INSERT INTO MVC3_Characters VALUES (22, 'Deadpool', 3, 2, 6, 'Mercenary', 'Yes');
+INSERT INTO MVC3_Characters VALUES (23, 'Doctor Doom', 4, 5, 4, 'Monarch of Latveria', 'Yes');
+INSERT INTO MVC3_Characters VALUES (24, 'Doctor Strange', 2, 2, 3, 'Sorcerer Supreme', 'Yes');
+INSERT INTO MVC3_Characters VALUES (25, 'Dormammu', 7, 7, 4, 'Conqueror', 'No');
+INSERT INTO MVC3_Characters VALUES (26, 'Ghost Rider', 4, 5, 2, 'Former Stuntman', 'Yes');
+INSERT INTO MVC3_Characters VALUES (27, 'Hawkeye', 2, 2, 4, 'Adventurer', 'Yes');
+INSERT INTO MVC3_Characters VALUES (28, 'Hulk', 7, 3, 4, 'Scientist', 'No');
+INSERT INTO MVC3_Characters VALUES (29, 'Iron Fist', 2, 2, 6, 'Adventurer', 'No');
+INSERT INTO MVC3_Characters VALUES (30, 'Iron Man', 6, 5, 3, 'Adventurer', 'Yes');
+INSERT INTO MVC3_Characters VALUES (31, 'M.O.D.O.K.', 1, 1, 1, 'Leader of A.I.M.', 'Yes');
+INSERT INTO MVC3_Characters VALUES (32, 'Magneto', 2, 5, 3, 'Conqueror', 'Yes');
+INSERT INTO MVC3_Characters VALUES (33, 'Nova', 7, 7, 4, 'Soldier', 'No');
+INSERT INTO MVC3_Characters VALUES (34, 'Phoenix', 2, 7, 4, 'Adventurer', 'No');
+INSERT INTO MVC3_Characters VALUES(35, 'Rocket Raccoon', 2, 2, 4, 'Intergalactic Explorer', 'Yes');
+INSERT INTO MVC3_Characters VALUES (36, 'Sentinel', 4, 3, 4, 'Mutant Hunter', 'Yes');
+INSERT INTO MVC3_Characters VALUES (37, 'She Hulk', 7, 3, 4, 'Lawyer', 'No');
+INSERT INTO MVC3_Characters VALUES(38, 'Spider-Man', 4, 3, 4, 'Freelance Photographer', 'No');
+INSERT INTO MVC3_Characters VALUES(39, 'Storm', 2, 3, 4, 'Queen', 'No');
+INSERT INTO MVC3_Characters VALUES (40, 'Wolverine', 4, 2, 7, 'Adventurer', 'Yes');
+
+SELECT * FROM MVC3_Characters;
+
+SELECT AVG(Speed) FROM MVC3_Characters;
+
+SELECT name, MAX(Strength) FROM MVC3_characters;
+
+SELECT Name, MIN(Fighting_Ability) FROM MVC3_Characters;
+
+SELECT Name, MAX(Strength) AS Highest_Strength 
+FROM MVC3_characters
+GROUP BY Name
+HAVING Strength>4;
+
+SELECT Name,
+CASE 
+    WHEN Strength + Fighting_Ability >= 10 THEN "Strong"
+    WHEN Strength + Fighting_Ability >=6  THEN "Average" 
+    WHEN Strength + Fighting_Ability  <=5 THEN "Weak"
+    END AS "Usefulness"
+    FROM MVC3_Characters
+    GROUP BY Name;
+    
+    SELECT Name FROM MVC3_Characters WHERE Strength>4 AND Speed > 5;
+    
+    SELECT Name FROM MVC3_Characters WHERE Strength > 3 OR Speed > 5 OR Fighting_Ability > 4;
