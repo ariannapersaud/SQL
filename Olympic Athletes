@@ -25,11 +25,13 @@ INSERT INTO 'Olympic_Medals' VALUES (9, 1, 0, 0);
 INSERT INTO 'Olympic_Medals' VALUES (10, 1, 0, 0);
 SELECT * FROM Olympic_Medals;
 
+--How can we see the name of the Olympic Athlete, the country they are from, and the amount of gold, silver and bronze medals they have?
 SELECT Name, Country, Gold, Silver, Bronze 
 FROM Olympic_Athletes 
 JOIN Olympic_Medals
 ON Olympian_ID=Olympic_Athletes.ID; 
 
+--How can we see which countries have the most gold medals?
 SELECT Country, SUM(Gold) AS Total_Gold_Medals
 FROM Olympic_Medals
 JOIN Olympic_Athletes
