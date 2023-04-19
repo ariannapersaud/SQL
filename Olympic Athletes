@@ -1,0 +1,37 @@
+CREATE TABLE 'Olympic_Athletes' (ID INTEGER PRIMARY KEY, Name TEXT, Country TEXT, Sport TEXT);
+
+INSERT INTO 'Olympic_Athletes' VALUES (1, 'Michael Phelps', 'United States of America', 'Swimming');
+INSERT INTO 'Olympic_Athletes' VALUES (2, 'Tom Daley', 'United Kingdom', 'Diving');
+INSERT INTO 'Olympic_Athletes' VALUES (3, 'Usain Bolt', 'Jamaica', 'Sprinting');
+INSERT INTO 'Olympic_Athletes' VALUES (4, 'Simone Biles', 'United States of America', 'Gymnastics');
+INSERT INTO 'Olympic_Athletes' VALUES (5, 'Mary Kom', 'India', 'Boxing');
+INSERT INTO 'Olympic_Athletes' VALUES (6, 'Matthias Steiner', 'Austria-Germany', 'Weight Lifting'); 
+INSERT INTO 'Olympic_Athletes' VALUES (7, 'An San', 'Korea', 'Archery');
+INSERT INTO 'Olympic_Athletes' VALUES (8, 'Neeraj Chopra', 'India', 'Track and Field');
+INSERT INTO 'Olympic_Athletes' VALUES (9, 'Yuto Horigome', 'Japan', 'Skateboarding');
+INSERT INTO 'Olympic_Athletes' VALUES (10, 'Flora Duffy', 'Bermuda', 'Triathalon'); 
+SELECT * FROM Olympic_Athletes;
+
+CREATE TABLE 'Olympic_Medals' (Olympian_ID INTEGER, Gold INTEGER, Silver INTEGER, Bronze INTEGER);
+INSERT INTO 'Olympic_Medals' VALUES (1, 23, 3, 2);
+INSERT INTO 'Olympic_Medals' VALUES (2, 1, 0, 3);
+INSERT INTO 'Olympic_Medals' VALUES (3, 8, 0, 0);
+INSERT INTO 'Olympic_Medals' VALUES (4, 4, 1, 2);
+INSERT INTO 'Olympic_Medals' VALUES (5, 0, 0, 1);
+INSERT INTO 'Olympic_Medals' VALUES (6, 1, 0, 0);
+INSERT INTO 'Olympic_Medals' VALUES (7, 3, 0, 0);
+INSERT INTO 'Olympic_Medals' VALUES (8, 1, 0, 0);
+INSERT INTO 'Olympic_Medals' VALUES (9, 1, 0, 0);
+INSERT INTO 'Olympic_Medals' VALUES (10, 1, 0, 0);
+SELECT * FROM Olympic_Medals;
+
+SELECT Name, Country, Gold, Silver, Bronze 
+FROM Olympic_Athletes 
+JOIN Olympic_Medals
+ON Olympian_ID=Olympic_Athletes.ID; 
+
+SELECT Country, SUM(Gold) AS Total_Gold_Medals
+FROM Olympic_Medals
+JOIN Olympic_Athletes
+ON Olympian_ID=Olympic_Athletes.ID
+GROUP BY Country; 
