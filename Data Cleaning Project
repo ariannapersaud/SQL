@@ -1,0 +1,179 @@
+--Standardized Date Format
+-- In this portion, I cleaned up the date column of this table. The original dataset included the time along with the date. 
+However, the time served no purpose in being inside the dataset, so I removed it by altering the table to keep the date alone with no time. 
+
+select SaleDateconverted, CONVERT (Date, SaleDate)
+from PortfolioProjects.dbo.NashvilleHousing
+
+UPDATE NashvilleHousing
+SET SaleDate = CONVERT (Date, SaleDate);
+
+ALTER TABLE NashvilleHousing
+ADD SaleDateconverted Date
+
+UPDATE NashvilleHousing
+SET SaleDateconverted=CONVERT (Date, SaleDate);
+
+
+--Populate Property Address 
+A few of the addresses were not populated, and there were null values in the property address column. In the table, each Parcel ID was connected to
+a specific address. However, some Parcel ID's were duplicates with no address connected to them(null values) To fix this, I used a self join
+on the basis that the Parcel ID's were the same, but the unique IDs were not. This allowed me to place each Parcel ID with its 
+respective property address without any null values.
+
+select *
+from PortfolioProjects.dbo.NashvilleHousing
+--where PropertyAddress is NULL
+order by ParcelID
+
+select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress, b.PropertyAddress)
+from PortfolioProjects.dbo.NashvilleHousing a
+JOIN PortfolioProjects.dbo.NashvilleHousing b
+	on a.ParcelID=b.ParcelID
+	AND a.[UniqueID ]<>b.[UniqueID ]
+	WHERE a.PropertyAddress IS NULL
+
+UPDATE a 
+SET PropertyAddress = ISNULL(a.PropertyAddress, b.PropertyAddress)
+from PortfolioProjects.dbo.NashvilleHousing a
+JOIN PortfolioProjects.dbo.NashvilleHousing b
+	on a.ParcelID=b.ParcelID
+	AND a.[UniqueID ]<>b.[UniqueID ]
+	WHERE a.PropertyAddress IS NULL
+
+	-- Breaking Out Address Into Individual Columns (Address, City State)
+  The address columns in the table were quite disorganized. They included the Address and the City in one column. So, I fixed this problem in two ways.
+  For the property address column, I used a substring to separate the data by address and city. The first substring is for the address and the
+  second substring is for the city. For the Owner address column, I cleaned this data using Parsename to separate the data by City, address and state.
+  
+
+select PropertyAddress
+from PortfolioProjects.dbo.NashvilleHousing
+--where PropertyAddress is NULL
+--order by ParcelID
+
+SELECT 
+SUBSTRING(PropertyAddress, 1, CHARINDEX (',', PropertyAddress) -1 ) as Address,
+SUBSTRING(PropertyAddress, CHARINDEX (',', PropertyAddress) +1 , LEN(PropertyAddress)) as City
+
+
+FROM PortfolioProjects.dbo.NashvilleHousing
+
+ALTER TABLE NashvilleHousing
+ADD PropertySplitAddress NVARCHAR(255)
+
+UPDATE NashvilleHousing
+SET PropertySplitAddress=SUBSTRING(PropertyAddress, 1, CHARINDEX (',', PropertyAddress) -1 )
+
+ALTER TABLE NashvilleHousing
+ADD PropertySplitCity NVARCHAR(255)
+
+UPDATE NashvilleHousing
+SET PropertySplitCity=SUBSTRING(PropertyAddress, CHARINDEX (',', PropertyAddress) +1 , LEN(PropertyAddress))
+
+SELECT * FROM PortfolioProjects.dbo.NashvilleHousing
+
+
+
+
+SELECT 
+PARSENAME(REPLACE(OwnerAddress, ',', '.'), 3)
+,PARSENAME(REPLACE(OwnerAddress, ',', '.'), 2)
+,PARSENAME(REPLACE(OwnerAddress, ',', '.'), 1)
+FROM PortfolioProjects.dbo.NashvilleHousing
+
+ALTER TABLE NashvilleHousing
+ADD OwnerSplitAddress NVARCHAR(255)
+
+UPDATE NashvilleHousing
+SET OwnerSplitAddress=PARSENAME(REPLACE(OwnerAddress, ',', '.'), 3)
+
+ALTER TABLE NashvilleHousing
+ADD OwnerSplitCity NVARCHAR(255)
+
+UPDATE NashvilleHousing
+SET OwnerSplitCity=PARSENAME(REPLACE(OwnerAddress, ',', '.'), 2)
+
+ALTER TABLE NashvilleHousing
+ADD OWnerSplitState NVARCHAR(255)
+
+UPDATE NashvilleHousing
+SET OwnerSplitState=PARSENAME(REPLACE(OwnerAddress, ',', '.'), 1)
+
+
+SELECT * 
+FROM PortfolioProjects.dbo.NashvilleHousing
+
+
+--Change Y and N to Yes and No in "Sold as Vacant" Field
+The sold as vacant column had two possible outcomes, which were 'yes' and 'no' respectively. However, Some of this data was 
+displayed as 'Y' or 'N' even though they are the same as 'Yes' and 'No'. To solve this problem, I used a CASE statement
+to change 'Y' and 'N' to 'yes' and 'no', while keeping the rows that already had 'Yes' and 'No'. 
+
+SELECT DISTINCT(SoldAsVacant), COUNT(SoldAsVacant)
+FROM PortfolioProjects.dbo.NashvilleHousing
+GROUP BY SoldAsVacant
+ORDER BY 2
+
+
+SELECT SoldAsVacant,
+CASE WHEN SoldAsVacant='Y' THEN 'Yes'
+	WHEN SoldAsVacant ='N' THEN 'No'
+	ELSE SoldAsVacant
+	END
+FROM PortfolioProjects.dbo.NashvilleHousing
+
+
+UPDATE NashvilleHousing
+SET SoldAsVacant=
+CASE WHEN SoldAsVacant='Y' THEN 'Yes'
+	WHEN SoldAsVacant ='N' THEN 'No'
+	ELSE SoldAsVacant
+	END
+
+SELECT DISTINCT(SoldAsVacant), COUNT(SoldAsVacant)
+FROM PortfolioProjects.dbo.NashvilleHousing
+GROUP BY SoldAsVacant
+ORDER BY 2
+
+
+-- Remove Duplicates
+
+WITH Row_NumCTE AS(
+SELECT *,
+	ROW_NUMBER() OVER(
+	PARTITION BY ParcelID,
+				 PropertyAddress,
+				 SalePrice,
+				 SaleDate,
+				 LegalReference
+				 ORDER BY UniqueID
+				 ) row_num
+
+FROM PortfolioProjects.dbo.NashvilleHousing
+--ORDER BY ParcelID
+)
+
+
+
+SELECT * 
+FROM Row_NumCTE
+WHERE row_num >1 
+--ORDER BY PropertyAddress
+
+
+
+
+-----Delete Unused Columns 
+There were a few columns in the data that were not useful in any context. For example, there was no reason to keep the
+property address column and the owner address column because I split that data into more columns. I got rid of the unnecessary columns
+by using the drop column function. 
+
+SELECT * 
+FROM PortfolioProjects.dbo.NashvilleHousing
+
+ALTER TABLE PortfolioProjects.dbo.NashvilleHousing
+DROP COLUMN OwnerAddress, PropertyAddress, TaxDistrict
+
+ALTER TABLE PortfolioProjects.dbo.NashvilleHousing
+DROP COLUMN SaleDate
