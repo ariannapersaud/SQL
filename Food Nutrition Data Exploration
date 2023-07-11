@@ -1,0 +1,69 @@
+ELECT *
+FROM PortfolioProjects.DBO.FoodList
+
+ALTER TABLE 
+PortfolioProjects.dbo.FoodList
+
+DROP COLUMN 
+F9, 
+Note;
+
+SELECT 
+ Food_Item
+, Calories
+, Protein 
+
+FROM PortfolioProjects.dbo.FoodList
+ORDER BY Protein DESC
+
+-- Select Foods that are high in protein, but low in calories. With this Query we can see that Beef
+--is the best food that meets this criteria. 
+
+SELECT 
+Food_Item
+, Calories 
+, Protein
+
+FROM PortfolioProjects.dbo.FoodList
+WHERE Calories <300 AND Protein >15
+ORDER BY Protein DESC 
+
+-- Show the average calories of each individual category in the table
+SELECT DISTINCT Category
+, AVG(Calories) AS 'AVGCAL'
+FROM PortfolioProjects.dbo.FoodList
+GROUP BY Category
+ORDER BY AVGCAL DESC
+
+--Show the food in the table with the least calories.
+SELECT 
+ MIN(Calories) AS 'C'
+, Food_Item
+FROM PortfolioProjects.dbo.FoodList
+WHERE category ='Vegetable'
+GROUP BY Food_Item, Category
+ORDER BY C asc
+
+
+--View the food with the most calories in the table. 
+SELECT MAX(Calories) as C
+, Food_Item
+, Category
+FROM PortfolioProjects.dbo.FoodList
+GROUP BY Category, Food_Item
+ORDER BY C DESC
+OFFSET 0 ROWS
+FETCH NEXT 3 ROWS ONLY 
+
+-- View data of Fast Foods, ordered by their calories. 
+SELECT 
+  Food_Item
+, Category
+, Calories
+, Protein 
+, Fat
+, Carbs
+
+FROM PortfolioProjects.dbo.FoodList
+WHERE Category = 'Fast Foods'
+ORDER BY Calories Desc
